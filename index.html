@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WithKM - GitHub Development Guidelines</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e5bf7, #0d47a1);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .project-info {
+            text-align: right;
+        }
+
+        .project-info h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .project-info p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Navigation */
+        .nav-section {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        .content-section {
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #1e5bf7, #0d47a1);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .section-content {
+            padding: 2rem;
+        }
+
+        /* Status Indicators */
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-live {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-not-synced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #1e5bf7;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .code-header {
+            background: #1a202c;
+            color: #a0aec0;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            border-radius: 8px 8px 0 0;
+            margin: 1rem 0 0 0;
+        }
+
+        .code-header + .code-block {
+            border-radius: 0 0 8px 8px;
+            margin-top: 0;
+        }
+
+        /* Branching Strategy Visual */
+        .branching-visual {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .branch-line {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border-left: 4px solid #1e5bf7;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .branch-main { border-left-color: #28a745; }
+        .branch-staging { border-left-color: #ffc107; }
+        .branch-development { border-left-color: #1e5bf7; }
+        .branch-feature { border-left-color: #17a2b8; }
+        .branch-bugfix { border-left-color: #dc3545; }
+        .branch-hotfix { border-left-color: #fd7e14; }
+
+        /* Workflow Steps */
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .workflow-step {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #1e5bf7;
+        }
+
+        .workflow-step h4 {
+            color: #1e5bf7;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-step ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .workflow-step li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .workflow-step li:before {
+            content: "→";
+            color: #1e5bf7;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Guidelines Grid */
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .guideline-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid #1e5bf7;
+        }
+
+        .guideline-card h4 {
+            color: #1e5bf7;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Cards */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .contact-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: #1e5bf7;
+            transform: translateY(-2px);
+        }
+
+        .contact-card h4 {
+            color: #1e5bf7;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e5bf7;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .section-content {
+                padding: 1rem;
+            }
+
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        .content-section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Emojis for better visual appeal */
+        .emoji {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">W/KM</a>
+                <div class="project-info">
+                    <h1>🔨 GitHub Development Guidelines</h1>
+                    <p>Project: Sugod | Last Updated: July 3, 2025</p>
+                </div>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="container">
+                <nav class="nav-links">
+                    <a href="#environments">🔗 Environments</a>
+                    <a href="#branching">📦 Branching</a>
+                    <a href="#workflow">🔄 Workflow</a>
+                    <a href="#guidelines">✅ Guidelines</a>
+                    <a href="#deployment">🚀 Deployment</a>
+                    <a href="#contacts">📬 Contacts</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Environments Section -->
+            <section id="environments" class="content-section">
+                <div class="section-header">
+                    <span class="emoji">🔗</span>
+                    <h2>Environments</h2>
+                </div>
+                <div class="section-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Environment</th>
+                                    <th>URL</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Development</strong></td>
+                                    <td>https://dev.withkm.com</td>
+                                    <td>Playground for active development</td>
+                                    <td><span class="status-badge status-live">✅ LIVE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Staging</strong></td>
+                                    <td>https://staging.withkm.com</td>
+                                    <td>QA, testing, UAT</td>
+                                    <td><span class="status-badge status-pending">🔜 NOT YET LIVE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Production</strong></td>
+                                    <td>https://www.withkm.com</td>
+                                    <td>Final release for client/customer use</td>
+                                    <td><span class="status-badge status-not-synced">✅ LIVE (Not Synced)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Branching Strategy Section -->
+            <section id="branching" class="content-section">
+                <div class="section-header">
+                    <span class="emoji">📦</span>
+                    <h2>Branching Strategy</h2>
+                </div>
+                <div class="section-content">
+                    <div class="branching-visual">
+                        <div class="branch-line branch-main">main → Production (live/stable)</div>
+                        <div class="branch-line branch-staging">staging → QA / UAT branch</div>
+                        <div class="branch-line branch-development">development → Active development (base branch for all devs)</div>
+                        <div class="branch-line branch-feature">feature/* → Feature branches (created from development)</div>
+                        <div class="branch-line branch-bugfix">bugfix/* → Bug fix branches (created from development)</div>
+                        <div class="branch-line branch-hotfix">hotfix/* → Emergency fix for production (created from main)</div>
+                    </div>
+                    <p><strong>🔹 Default branch:</strong> development</p>
+                </div>
+            </section>
+
+            <!-- Getting Started Section -->
+            <section id="getting-started" class="content-section">
+                <div class="section-header">
+                    <span class="emoji">👨‍💻</span>
+                    <h2>Getting Started</h2>
+                </div>
+                <div class="section-content">
+                    <h4>1. Clone the repository</h4>
+                    <div class="code-header">bash</div>
+                    <div class="code-block">
+                        <code>git clone https://github.com/your-org/sugod.git
+cd sugod</code>
+                    </div>
+
+                    <h4>2. Checkout to development</h4>
+                    <div class="code-header">bash</div>
+                    <div class="code-block">
+                        <code>git checkout development</code>
+                    </div>
+
+                    <h4>3. Create your working branch</h4>
+                    <div class="code-header">bash</div>
+                    <div class="code-block">
+                        <code>git checkout -b feature/your-feature-name</code>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workflow Section -->
+            <section id="workflow" class="content-section">
+                <div class="section-header">
+                    <span class="emoji">🔄</span>
+                    <h2>Workflow</h2>
+                </div>
+                <div class="section-content">
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <h4>1. Development (dev.withkm.com)</h4>
+                            <ul>
+                                <li>All development starts from the development branch</li>
+                                <li>Work on your feature using feature/* or bugfix/* branches</li>
+                                <li>Push regularly and pull the latest changes to avoid conflicts</li>
+                            </ul>
+                        </div>
+                        <div class="workflow-step">
+                            <h4>2. Staging (staging.withkm.com)</h4>
+                            <ul>
+                                <li>Merge tested and completed features into staging branch via PR</li>
+                                <li>Staging is for QA, testing, and approval before production</li>
+                                <li>No direct commits to staging</li>
+                            </ul>
+                        </div>
+                        <div class="workflow-step">
+                            <h4>3. Production (www.withkm.com)</h4>
+                            <ul>
+                                <li>Once QA is done, merge staging → main</li>
+                                <li>Only maintainers should handle production deployments</li>
+                                <li>After merge, production deployment is triggered</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Guidelines Section -->
+            <section id="guidelines" class="content-section">
+                <div class="section-header">
+                    <span class="emoji">✅</span>
+                    <h2>Pull Request & Code Guidelines</h2>
+                </div>
+                <div class="section-content">
+                    <div class="guidelines-grid">
+                        <div class="guideline-card">
+                            <h4>✅ Pull Request Guidelines</h4>
+                            <ul>
+                                <li>Use clear and descriptive PR title</li>
+                                <li>Include brief summary of changes</li>
+                                <li>Link related issues or tasks</li>
+                                <li>Assign at least one reviewer</li>
+                                <li>Run tests locally before submitting</li>
+                            </ul>
+                        </div>
+                        <div class="guideline-card">
+                            <h4>🧪 Testing Responsibilities</h4>
+                            <ul>
+                                <li>Write unit tests for your feature or fix</li>
+                                <li>Ensure changes don't break existing functionality</li>
+                                <li>QA will conduct manual testing in staging</li>
+                            </ul>
+                        </div>
+                        <div class="guideline-card">
+                            <h4>⚙️ Code Standards</h4>
+                            <ul>
+                                <li>Follow project-specific style guides</li>
+                                <li>Keep code clean, commented, and organized</li>
+                                <li>Avoid committing temporary files and secrets</li>
+                            </ul>
+                        </div>
+                        <div class="guideline-card">
+                            <h4>📁 Environment Variables</h4>
+                            <ul>
+                                <li>Do not commit .env files</li>
+                                <li>Use .env.example as template</li>
+                                <li>Use secrets manager for sensitive data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Deployment Section -->
+            <section id="deployment" class="content-section">
+                <div class="section-header">
+                    <span class="emoji">🚀</span>
+                    <h2>Deployment Overview</h2>
+                </div>
+                <div class="section-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Branch</th>
+                                    <th>Environment URL</th>
+                                    <th>Trigger Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>development</td>
+                                    <td>https://dev.withkm.com</td>
+                                    <td>Auto/manual</td>
+                                </tr>
+                                <tr>
+                                    <td>staging</td>
+                                    <td>https://staging.withkm.com</td>
+                                    <td>Manual (after PR)</td>
+                                </tr>
+                                <tr>
+                                    <td>main</td>
+                                    <td>https://www.withkm.com</td>
+                                    <td>Manual (post-QA)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>🧯 Emergency Fixes</h4>
+                    <div class="workflow-step">
+                        <ul>
+                            <li>Branch from main: <code>hotfix/your-fix-name</code></li>
+                            <li>Apply fix → PR to main</li>
+                            <li>Merge fix back into staging and development to sync changes</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 WithKM - GitHub Development Guidelines | Project Sugod</p>
+            <p>Turning Plans Into Progress</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active navigation item
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.background = '';
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.style.background = 'rgba(255,255,255,0.2)';
+                }
+            });
+        });
+
+        // Add copy functionality to code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', async () => {
+                const code = block.querySelector('code').textContent;
+                try {
+                    await navigator.clipboard.writeText(code);
+                    const originalBg = block.style.background;
+                    block.style.background = '#28a745';
+                    setTimeout(() => {
+                        block.style.background = originalBg;
+                    }, 200);
+                } catch (err) {
+                    console.log('Failed to copy code');
+                }
+            });
+            
+            // Add cursor pointer to indicate clickable
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy code';
+        });
+
+        // Console message
+        console.log('🔨 WithKM GitHub Development Guidelines');
+        console.log('Project: Sugod | Guidelines for developers');
+        console.log('Click on code blocks to copy them!');
+    </script>
+</body>
+</html>
